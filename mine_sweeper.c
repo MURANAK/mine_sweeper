@@ -4,7 +4,7 @@
 
 #define LIN 9
 #define COL 9
-#define BOMBA 5 //precisa ser uma valor maior que o valor max de bombas no entorno
+#define BOMBA -1 //precisa ser uma valor maior que o valor max de bombas no entorno
 
 //PROTÓTIPOS
 void msg_inicial();
@@ -50,6 +50,15 @@ int main(){
                 if(campo[l][c-1] == BOMBA && (c-1)>=0) //vendo norte
                     quant_bombas++;
                 if(campo[l][c+1] == BOMBA && (c+1)<COL) //vendo sul
+                    quant_bombas++;
+
+                if(campo[l-1][c-1] == BOMBA && (l-1)>=0) //vendo noroeste
+                    quant_bombas++;
+                if(campo[l+1][c-1] == BOMBA && (l+1)<LIN) //vendo sudoeste
+                    quant_bombas++;
+                if(campo[l-1][c+1] == BOMBA && (c-1)>=0) //vendo nordeste
+                    quant_bombas++;
+                if(campo[l+1][c+1] == BOMBA && (c+1)<COL) //vendo suldeste
                     quant_bombas++;
 
                 campo[l][c] = quant_bombas;
