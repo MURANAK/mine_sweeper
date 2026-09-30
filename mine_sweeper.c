@@ -84,6 +84,12 @@ int main(){
             printf("\nInsira a coordenada Y que deseja atacar entre [%d, %d] e aperte enter: ", 1, COL);
             scanf("%d", &y);
             y-=1;
+
+            if(x<0 || x>=LIN || y<0 || y>=COL)
+                printf("\nCOORDENADA INVALIDA! TENTE NOVAMENTE!\n");
+            else if(jogadas[x][y] == 1)
+                printf("\nCOORDENADA JA REVELADA! TENTE NOVAMENTE!\n");
+            
         }while(x<0 || x>=LIN || y<0 || y>=COL || jogadas[x][y] == 1);
         
 
@@ -160,7 +166,10 @@ void ver_campo_cheat(int campo[LIN][COL]){
     int l, c;
     for(l=0; l<LIN; l++){
         for(c=0; c<COL; c++)
-            printf("%d ", campo[l][c]);
+            if(campo[l][c] == BOMBA)
+                printf("# ");
+            else
+                printf("%d ", campo[l][c]);
         printf("\n");
     }
 }
