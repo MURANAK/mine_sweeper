@@ -6,6 +6,11 @@
 #define COL 9
 #define BOMBA 5 //precisa ser uma valor maior que o valor max de bombas no entorno
 
+//PROTÓTIPOS
+void msg_inicial();
+void ver_campo_cheat(int campo[LIN][COL]);
+void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]);
+
 int main(){
     //definindo a semente
     srand(time(NULL));
@@ -30,11 +35,7 @@ int main(){
     }
 
     //visualizando o campo
-    /*for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++)
-            printf("%d ", campo[l][c]);
-        printf("\n");
-    }*/
+    //ver_campo_cheat(campo);
 
     //colocando quantas bombas tem no entorno dos espacos vazios
     for(l=0; l<LIN; l++){
@@ -57,58 +58,31 @@ int main(){
     }
 
     //visualizando o campo
-   /* printf("\n");
-    for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++)
-            printf("%d ", campo[l][c]);
-        printf("\n");
-    }*/
+   //ver_campo_cheat(campo);
 
 
-    printf("\nBEM VINDO AO CAMPO MINADO\n");
-    printf("BOMBAS SAO REPRESENTADAS COM O CARACTERE '#'\n");
-    printf("OS NUMEROS MOSTRAM QUANTAS BOMBAS EXISTEM NO ENTORNO IMEDIADO DAQUELA CASA (NORTE, SUL LESTE OESTE)\n");
-    printf("VOCE NAO PODE CHUTAR COORDENADAS QUE JA FORAM REVELADAS\n");
-    printf("SEU OBJETIVO EH REVELAR O CAMPO INTEIRO SEM PEGAR UMA BOMBA\n");
-    printf("BOA SORTE!\n");
+    msg_inicial();
 
 
     do{
-        printf("\n");
-            for(l=0; l<LIN; l++){
-                for(c=0; c<COL; c++){
-                    if(jogadas[l][c] == 1 && campo[l][c] == BOMBA){
-                        printf("# ");
-                    }
-                    else if(jogadas[l][c] == 1)
-                        printf("%d ", campo[l][c]);
-                    else{
-                        printf("? ");
-                    }
-                }
-                printf("\n");
-            }
+        mostrar_campo(campo, jogadas);
 
-            do{
-                printf("\nInsira a coordenada X que deseja atacar entre [%d, %d] e aperte enter: ", 1, LIN);
-                scanf("%d", &x);
-                x-=1;
+        do{
+            printf("\nInsira a coordenada X que deseja atacar entre [%d, %d] e aperte enter: ", 1, LIN);
+            scanf("%d", &x);
+            x-=1;
 
-                printf("\nInsira a coordenada Y que deseja atacar entre [%d, %d] e aperte enter: ", 1, COL);
-                scanf("%d", &y);
-                y-=1;
-            }while(x<0 || x>=LIN || y<0 || y>=COL || jogadas[x][y] == 1);
+            printf("\nInsira a coordenada Y que deseja atacar entre [%d, %d] e aperte enter: ", 1, COL);
+            scanf("%d", &y);
+            y-=1;
+        }while(x<0 || x>=LIN || y<0 || y>=COL || jogadas[x][y] == 1);
         
 
         if(campo[x][y] == BOMBA){
             printf("\nVoce atingiu uma bomba, mais sorte na proxima vez!\n");
             //imprimindo o campo completo
             printf("\n");
-            for(l=0; l<LIN; l++){
-                for(c=0; c<COL; c++)
-                    printf("%d ", campo[l][c]);
-                printf("\n");
-            }
+            ver_campo_cheat(campo);
         }
         else{
             //Registrando a jogada
@@ -148,11 +122,7 @@ int main(){
     if(ganhou){
         printf("\nPARABENS! VOCE VENCEU!!\n");
         printf("\n");
-            for(l=0; l<LIN; l++){
-                for(c=0; c<COL; c++)
-                    printf("%d ", campo[l][c]);
-                printf("\n");
-            }
+        ver_campo_cheat(campo);
     }
 
     return 0;
@@ -160,4 +130,39 @@ int main(){
 
 
 //DECLARANDO FUNCOES
+void ver_campo_cheat(int campo[LIN][COL]){
+    int l, c;
+    for(l=0; l<LIN; l++){
+        for(c=0; c<COL; c++)
+            printf("%d ", campo[l][c]);
+        printf("\n");
+    }
+}
 
+void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]){
+    int l, c;
+
+    printf("\n");
+    for(l=0; l<LIN; l++){
+        for(c=0; c<COL; c++){
+            if(jogadas[l][c] == 1 && campo[l][c] == BOMBA){
+                printf("# ");
+            }
+            else if(jogadas[l][c] == 1)
+                printf("%d ", campo[l][c]);
+            else{
+                printf("? ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+void msg_inicial(){
+    printf("\nBEM VINDO AO CAMPO MINADO\n");
+    printf("BOMBAS SAO REPRESENTADAS COM O CARACTERE '#'\n");
+    printf("OS NUMEROS MOSTRAM QUANTAS BOMBAS EXISTEM NO ENTORNO IMEDIADO DAQUELA CASA (NORTE, SUL LESTE OESTE)\n");
+    printf("VOCE NAO PODE CHUTAR COORDENADAS QUE JA FORAM REVELADAS\n");
+    printf("SEU OBJETIVO EH REVELAR O CAMPO INTEIRO SEM PEGAR UMA BOMBA\n");
+    printf("BOA SORTE!\n");
+}
