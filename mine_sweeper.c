@@ -87,14 +87,27 @@ int main(){
         else{
             //Registrando a jogada
             jogadas[x][y] = 1;
-            if(x-1>=0)
+
+            if(x-1>=0){
                 jogadas[x-1][y] = 1;
-            if(x+1<LIN)
+                if(y-1>=0)
+                    jogadas[x-1][y-1] = 1;
+                if(y+1<COL)
+                    jogadas[x-1][y+1] = 1;
+            }
+            if(x+1<LIN){
                 jogadas[x+1][y] = 1;
-            if(y-1>=0)
+                if(y-1>=0)
+                    jogadas[x+1][y-1] = 1;
+                if(y+1<COL)
+                    jogadas[x+1][y+1] = 1;
+            }
+            if(y-1>=0){
                 jogadas[x][y-1] = 1;
-            if(y+1<COL)
+            }
+            if(y+1<COL){
                 jogadas[x][y+1] = 1;
+            }
         }
 
         //vendo quanto se o campo inteiro foi revelado
@@ -128,8 +141,12 @@ int main(){
     return 0;
 }
 
+/*
+****************************************************************************************************************************
+DECLARANDO FUNCOES
+****************************************************************************************************************************
+*/
 
-//DECLARANDO FUNCOES
 void ver_campo_cheat(int campo[LIN][COL]){
     int l, c;
     for(l=0; l<LIN; l++){
@@ -161,7 +178,7 @@ void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]){
 void msg_inicial(){
     printf("\nBEM VINDO AO CAMPO MINADO\n");
     printf("BOMBAS SAO REPRESENTADAS COM O CARACTERE '#'\n");
-    printf("OS NUMEROS MOSTRAM QUANTAS BOMBAS EXISTEM NO ENTORNO IMEDIADO DAQUELA CASA (NORTE, SUL LESTE OESTE)\n");
+    printf("OS NUMEROS MOSTRAM QUANTAS BOMBAS EXISTEM NO ENTORNO DAQUELA CASA\n");
     printf("VOCE NAO PODE CHUTAR COORDENADAS QUE JA FORAM REVELADAS\n");
     printf("SEU OBJETIVO EH REVELAR O CAMPO INTEIRO SEM PEGAR UMA BOMBA\n");
     printf("BOA SORTE!\n");
