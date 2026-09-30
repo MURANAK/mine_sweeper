@@ -12,7 +12,6 @@ int main(){
 
     //Declaracao de variaveis
     int campo[LIN][COL] = {0};
-    char gui[LIN][COL];
     int jogadas[LIN][COL] = {0};
     float tx_bomba = 0.3; //probabilidade de aparecer uma bomba
     float aux;
@@ -65,19 +64,6 @@ int main(){
         printf("\n");
     }*/
 
-    //preenchendo o campo do jogador
-    for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++)
-            gui[l][c] = '?';
-    }
-
-    /*//visualizando o campo do jogador
-    printf("\n");
-    for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++)
-            printf("%c ", gui[l][c]);
-        printf("\n");
-    }*/
 
     printf("\nBEM VINDO AO CAMPO MINADO\n");
     printf("BOMBAS SAO REPRESENTADAS COM O CARACTERE '#'\n");
@@ -97,7 +83,7 @@ int main(){
                     else if(jogadas[l][c] == 1)
                         printf("%d ", campo[l][c]);
                     else{
-                        printf("%c ", gui[l][c]);
+                        printf("? ");
                     }
                 }
                 printf("\n");
@@ -171,3 +157,7 @@ int main(){
 
     return 0;
 }
+
+
+//DECLARANDO FUNCOES
+
