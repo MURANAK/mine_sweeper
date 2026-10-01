@@ -4,69 +4,28 @@
 
 #define LIN 9
 #define COL 9
-#define BOMBA -1 //precisa ser uma valor maior que o valor max de bombas no entorno
+#define BOMBA -1 //precisa ser uma valor maior/menor que o valor max/min de bombas no entorno
 
 //PROTÓTIPOS
 void msg_inicial();
 void ver_campo_cheat(int campo[LIN][COL]);
 void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]);
+void criar_campo(int field[LIN][COL]);
+    void colocar_bombas(int cmp[LIN][COL]);
+    void ver_bombas(int cmp[LIN][COL]);
+void fazer_jogada(int jog[LIN][COL]);
 
 int main(){
-    //definindo a semente
-    srand(time(NULL));
 
     //Declaracao de variaveis
     int campo[LIN][COL] = {0};
     int jogadas[LIN][COL] = {0};
-    float tx_bomba = 0.3; //probabilidade de aparecer uma bomba
-    float aux;
     int l, c;
-    int quant_bombas;
     int x, y;
     int ganhou = 0, continuar;
 
-    //preenchendo o campo com bombas
-    for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++){
-            aux = (float)rand() / RAND_MAX;
-            if(aux < tx_bomba)
-                campo[l][c] = BOMBA;
-        }
-    }
+    criar_campo(campo);
 
-    //visualizando o campo
-    //ver_campo_cheat(campo);
-
-    //colocando quantas bombas tem no entorno dos espacos vazios
-    for(l=0; l<LIN; l++){
-        for(c=0; c<COL; c++){
-            quant_bombas = 0;
-
-            if(campo[l][c] == 0){
-                if(campo[l-1][c] == BOMBA && (l-1)>=0) //vendo leste
-                    quant_bombas++;
-                if(campo[l+1][c] == BOMBA && (l+1)<LIN) //vendo oeste
-                    quant_bombas++;
-                if(campo[l][c-1] == BOMBA && (c-1)>=0) //vendo norte
-                    quant_bombas++;
-                if(campo[l][c+1] == BOMBA && (c+1)<COL) //vendo sul
-                    quant_bombas++;
-
-                if(campo[l-1][c-1] == BOMBA && (l-1)>=0) //vendo noroeste
-                    quant_bombas++;
-                if(campo[l+1][c-1] == BOMBA && (l+1)<LIN) //vendo sudoeste
-                    quant_bombas++;
-                if(campo[l-1][c+1] == BOMBA && (c-1)>=0) //vendo nordeste
-                    quant_bombas++;
-                if(campo[l+1][c+1] == BOMBA && (c+1)<COL) //vendo suldeste
-                    quant_bombas++;
-
-                campo[l][c] = quant_bombas;
-            }
-        }
-    }
-
-    //visualizando o campo
    //ver_campo_cheat(campo);
 
 
@@ -126,18 +85,15 @@ int main(){
         }
 
         //vendo quanto se o campo inteiro foi revelado
-        //printf("\n");
         continuar = 0;
         for(l=0; l<LIN; l++){
             for(c=0; c<COL; c++){
-                //printf("%d ", jogadas[l][c]);
                 if(jogadas[l][c] == 1)
                     ganhou = 1;
                 else if(campo[l][c] != BOMBA){
                     continuar = 1;
                 }
             }
-            //printf("\n");
         }
 
         if(continuar){
@@ -172,6 +128,8 @@ void ver_campo_cheat(int campo[LIN][COL]){
                 printf("%d ", campo[l][c]);
         printf("\n");
     }
+
+    printf("\n");
 }
 
 void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]){
@@ -201,3 +159,73 @@ void msg_inicial(){
     printf("SEU OBJETIVO EH REVELAR O CAMPO INTEIRO SEM PEGAR UMA BOMBA\n");
     printf("BOA SORTE!\n");
 }
+
+/*
+As proximas funcoes usam do recurso de "ponteiros"
+esse recurso permite que eu crie um placeholder na declaracao da funcao e depois
+o valor alterado sera o valor da funcao que eu ira ser colocada no parametro
+eh preciso colocar o & antes do nome da variavel na chamada de funcao para passar para o
+compilador o endereco daquela variavel na memoria
+
+matrizes nao precisam que seja criado um ponteiro, seus nomes ja naturalmente indicam a primeira linha
+so eh preciso informar o numero de colunas
+*/
+
+void criar_campo(int field[LIN][COL]){
+
+    colocar_bombas(field);
+
+    ver_bombas(field);
+}
+
+void colocar_bombas(int cmp[LIN][COL]){
+    //definindo a semente
+    srand(time(NULL));
+
+    int l, c;
+    float aux;
+    float tx_bomba = 0.3; //definir as chances de aparacer uma bomba
+
+    for(l=0; l<LIN; l++){
+        for(c=0; c<COL; c++){
+            aux = (float)rand() / RAND_MAX;
+            if(aux < tx_bomba)
+                cmp[l][c] = BOMBA;
+        }
+    }
+}
+
+void ver_bombas(int cmp[LIN][COL]){
+    int l, c;
+    int quant_bombas;
+
+    for(l=0; l<LIN; l++){
+        for(c=0; c<COL; c++){
+            quant_bombas = 0;
+
+            if(cmp[l][c] == 0){
+                if(cmp[l-1][c] == BOMBA && (l-1)>=0) //vendo leste
+                    quant_bombas++;
+                if(cmp[l+1][c] == BOMBA && (l+1)<LIN) //vendo oeste
+                    quant_bombas++;
+                if(cmp[l][c-1] == BOMBA && (c-1)>=0) //vendo norte
+                    quant_bombas++;
+                if(cmp[l][c+1] == BOMBA && (c+1)<COL) //vendo sul
+                    quant_bombas++;
+
+                if(cmp[l-1][c-1] == BOMBA && (l-1)>=0) //vendo noroeste
+                    quant_bombas++;
+                if(cmp[l+1][c-1] == BOMBA && (l+1)<LIN) //vendo sudoeste
+                    quant_bombas++;
+                if(cmp[l-1][c+1] == BOMBA && (c-1)>=0) //vendo nordeste
+                    quant_bombas++;
+                if(cmp[l+1][c+1] == BOMBA && (c+1)<COL) //vendo suldeste
+                    quant_bombas++;
+
+                cmp[l][c] = quant_bombas;
+            }
+        }
+    }
+
+}
+
