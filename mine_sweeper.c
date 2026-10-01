@@ -13,104 +13,50 @@ void mostrar_campo(int campo[LIN][COL], int jogadas [LIN][COL]);
 void criar_campo(int field[LIN][COL]);
     void colocar_bombas(int cmp[LIN][COL]);
     void ver_bombas(int cmp[LIN][COL]);
-void fazer_jogada(int jog[LIN][COL]);
+void fazer_jogada(int jog[LIN][COL], int *x, int *y);
+void analisar_jogada(int cpm[LIN][COL], int jog[LIN][COL], int *x, int *y);
+int vitoria(int cmp[LIN][COL], int jog[LIN][COL]);
 
 int main(){
 
-    //Declaracao de variaveis
+    //PREPARANDO O JOGO
     int campo[LIN][COL] = {0};
-    int jogadas[LIN][COL] = {0};
-    int l, c;
-    int x, y;
-    int ganhou = 0, continuar;
-
     criar_campo(campo);
-
    //ver_campo_cheat(campo);
 
 
+   //INICIANDO O JOGO
     msg_inicial();
 
+    int jogadas[LIN][COL] = {0};
+    int x, y;
+    int ganhou = 0;
 
     do{
         mostrar_campo(campo, jogadas);
 
-        do{
-            printf("\nInsira a coordenada X que deseja atacar entre [%d, %d] e aperte enter: ", 1, LIN);
-            scanf("%d", &x);
-            x-=1;
-
-            printf("\nInsira a coordenada Y que deseja atacar entre [%d, %d] e aperte enter: ", 1, COL);
-            scanf("%d", &y);
-            y-=1;
-
-            if(x<0 || x>=LIN || y<0 || y>=COL)
-                printf("\nCOORDENADA INVALIDA! TENTE NOVAMENTE!\n");
-            else if(jogadas[x][y] == 1)
-                printf("\nCOORDENADA JA REVELADA! TENTE NOVAMENTE!\n");
-            
-        }while(x<0 || x>=LIN || y<0 || y>=COL || jogadas[x][y] == 1);
+        fazer_jogada(jogadas, &x, &y);
         
+        analisar_jogada(campo, jogadas, &x, &y);
 
-        if(campo[x][y] == BOMBA){
-            printf("\nVoce atingiu uma bomba, mais sorte na proxima vez!\n");
-            //imprimindo o campo completo
+        //vendo se venceu
+        ganhou = vitoria(campo, jogadas);
+
+
+        //mensagem de vitória
+        if(ganhou){
+            printf("\nPARABENS! VOCE VENCEU!!\n");
             printf("\n");
             ver_campo_cheat(campo);
-        }
-        else{
-            //Registrando a jogada
-            jogadas[x][y] = 1;
-
-            if(x-1>=0){
-                jogadas[x-1][y] = 1;
-                if(y-1>=0)
-                    jogadas[x-1][y-1] = 1;
-                if(y+1<COL)
-                    jogadas[x-1][y+1] = 1;
-            }
-            if(x+1<LIN){
-                jogadas[x+1][y] = 1;
-                if(y-1>=0)
-                    jogadas[x+1][y-1] = 1;
-                if(y+1<COL)
-                    jogadas[x+1][y+1] = 1;
-            }
-            if(y-1>=0){
-                jogadas[x][y-1] = 1;
-            }
-            if(y+1<COL){
-                jogadas[x][y+1] = 1;
-            }
-        }
-
-        //vendo quanto se o campo inteiro foi revelado
-        continuar = 0;
-        for(l=0; l<LIN; l++){
-            for(c=0; c<COL; c++){
-                if(jogadas[l][c] == 1)
-                    ganhou = 1;
-                else if(campo[l][c] != BOMBA){
-                    continuar = 1;
-                }
-            }
-        }
-
-        if(continuar){
-            ganhou = 0;
         }
 
 
     }while(campo[x][y] != BOMBA && ganhou == 0);
 
-    if(ganhou){
-        printf("\nPARABENS! VOCE VENCEU!!\n");
-        printf("\n");
-        ver_campo_cheat(campo);
-    }
 
     return 0;
 }
+
 
 /*
 ****************************************************************************************************************************
@@ -227,5 +173,80 @@ void ver_bombas(int cmp[LIN][COL]){
         }
     }
 
+}
+
+void fazer_jogada(int jog[LIN][COL], int *x, int *y){
+    do{
+            printf("\nInsira a LINHA que deseja atacar entre [%d, %d] e aperte enter: ", 1, LIN);
+            scanf("%d", &*x);
+            *x-=1;
+
+            printf("\nInsira a COLUNA que deseja atacar entre [%d, %d] e aperte enter: ", 1, COL);
+            scanf("%d", &*y);
+            *y-=1;
+
+            if(*x<0 || *x>=LIN || *y<0 || *y>=COL)
+                printf("\nCOORDENADA INVALIDA! TENTE NOVAMENTE!\n");
+            else if(jog[*x][*y] == 1)
+                printf("\nCOORDENADA JA REVELADA! TENTE NOVAMENTE!\n");
+            
+        }while(*x<0 || *x>=LIN || *y<0 || *y>=COL || jog[*x][*y] == 1);
+}
+
+void analisar_jogada(int cpm[LIN][COL], int jog[LIN][COL], int *x, int *y){
+    if(cpm[*x][*y] == BOMBA){
+        printf("\nVoce atingiu uma bomba, mais sorte na proxima vez!\n");
+        //imprimindo o campo completo
+        printf("\n");
+        ver_campo_cheat(cpm);
+    }
+    else{
+        //Registrando a jogada
+        jog[*x][*y] = 1;
+
+        if(*x-1>=0){
+            jog[*x-1][*y] = 1;
+            if(*y-1>=0)
+                jog[*x-1][*y-1] = 1;
+            if(*y+1<COL)
+                jog[*x-1][*y+1] = 1;
+        }
+        if(*x+1<LIN){
+            jog[*x+1][*y] = 1;
+            if(*y-1>=0)
+                jog[*x+1][*y-1] = 1;
+            if(*y+1<COL)
+                jog[*x+1][*y+1] = 1;
+        }
+        if(*y-1>=0){
+            jog[*x][*y-1] = 1;
+        }
+        if(*y+1<COL){
+            jog[*x][*y+1] = 1;
+        }
+    }
+}
+
+int vitoria(int cmp[LIN][COL], int jog[LIN][COL]){
+    int continuar = 0;
+    int vit = 0;
+    int l, c;
+
+    //vendo se todos os espacos sem bombas foram revelados
+    for(l=0; l<LIN; l++){
+            for(c=0; c<COL; c++){
+                if(jog[l][c] == 1)
+                    vit = 1;
+                else if(cmp[l][c] != BOMBA){
+                    continuar = 1;
+                }
+            }
+        }
+
+        if(continuar){
+            vit = 0;
+        }
+    
+    return vit;
 }
 
