@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "funcoes.h"
 
 #define LIN 9
 #define COL 9
