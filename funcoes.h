@@ -13,6 +13,7 @@ void fazer_jogada(int lin, int col, int jog[lin][col], int *x, int *y);
 void analisar_jogada(int lin, int col, int cpm[lin][col], int jog[lin][col], int *x, int *y, int bomba);
 int vitoria(int lin, int col, int cmp[lin][col], int jog[lin][col], int bomba);
 
+//Para ver o campo com todos os espacos revelados
 void ver_campo_cheat(int lin, int col, int campo[lin][col], int bomba){
     int l, c;
     for(l=0; l<lin; l++){
@@ -27,6 +28,7 @@ void ver_campo_cheat(int lin, int col, int campo[lin][col], int bomba){
     printf("\n");
 }
 
+//Para mostrar o campo, inicialmente todo escondido e revelando aos poucos
 void mostrar_campo(int lin, int col, int campo[lin][col], int jogadas [lin][col], int bomba){
     int l, c;
 
@@ -46,6 +48,7 @@ void mostrar_campo(int lin, int col, int campo[lin][col], int jogadas [lin][col]
     }
 }
 
+//Mensagem com as regras do campo minado
 void msg_inicial(){
     printf("\nBEM VINDO AO CAMPO MINADO\n");
     printf("BOMBAS SAO REPRESENTADAS COM O CARACTERE '#'\n");
@@ -66,6 +69,7 @@ matrizes nao precisam que seja criado um ponteiro, seus nomes ja naturalmente in
 so eh preciso informar o numero de colunas
 */
 
+//Juntando as duas funcoes de preparacao do campo em so uma
 void criar_campo(int lin, int col, int field[lin][col], int bomba){
 
     colocar_bombas(lin, col, field, bomba);
@@ -73,6 +77,7 @@ void criar_campo(int lin, int col, int field[lin][col], int bomba){
     ver_bombas(lin, col, field, bomba);
 }
 
+//Colocando as bombas "aleatoriamente"
 void colocar_bombas(int lin, int col, int cmp[lin][col], int bomba){
     //definindo a semente
     srand(time(NULL));
@@ -90,6 +95,7 @@ void colocar_bombas(int lin, int col, int cmp[lin][col], int bomba){
     }
 }
 
+//Colocando quantas bombas ha no entorno dos espacos sem bomba
 void ver_bombas(int lin, int col, int cmp[lin][col], int bomba){
     int l, c;
     int quant_bombas;
@@ -124,6 +130,7 @@ void ver_bombas(int lin, int col, int cmp[lin][col], int bomba){
 
 }
 
+//Para registrar as jogadas
 void fazer_jogada(int lin, int col, int jog[lin][col], int *x, int *y){
     do{
             printf("\nInsira a LINHA que deseja atacar entre [%d, %d] e aperte enter: ", 1, lin);
@@ -142,6 +149,8 @@ void fazer_jogada(int lin, int col, int jog[lin][col], int *x, int *y){
         }while(*x<0 || *x>=lin || *y<0 || *y>=col || jog[*x][*y] == 1);
 }
 
+
+//Vendo se atingiu uma bomba, se nao, registrando a jogada 
 void analisar_jogada(int lin, int col, int cpm[lin][col], int jog[lin][col], int *x, int *y, int bomba){
     if(cpm[*x][*y] == bomba){
         printf("\nVoce atingiu uma bomba, mais sorte na proxima vez!\n");
@@ -176,6 +185,7 @@ void analisar_jogada(int lin, int col, int cpm[lin][col], int jog[lin][col], int
     }
 }
 
+//Vendo se as condicoes de vitoria foram satisfeitas
 int vitoria(int lin, int col, int cmp[lin][col], int jog[lin][col], int bomba){
     int continuar = 0;
     int vit = 0;
