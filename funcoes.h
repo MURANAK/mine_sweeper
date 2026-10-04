@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 
 //PROTÓTIPOS
 void msg_inicial();
@@ -12,14 +13,18 @@ void criar_campo(int lin, int col, int field[lin][col], int bomba);
 void fazer_jogada(int lin, int col, int jog[lin][col], int *x, int *y);
 void analisar_jogada(int lin, int col, int cpm[lin][col], int jog[lin][col], int *x, int *y, int bomba);
 int vitoria(int lin, int col, int cmp[lin][col], int jog[lin][col], int bomba);
+void mudaCor(int cor);
 
 //Para ver o campo com todos os espacos revelados
 void ver_campo_cheat(int lin, int col, int campo[lin][col], int bomba){
     int l, c;
     for(l=0; l<lin; l++){
         for(c=0; c<col; c++)
-            if(campo[l][c] == bomba)
+            if(campo[l][c] == bomba){
+                mudaCor(4); //bombas em vermelho
                 printf("# ");
+                mudaCor(7);
+            }
             else
                 printf("%d ", campo[l][c]);
         printf("\n");
@@ -32,20 +37,34 @@ void ver_campo_cheat(int lin, int col, int campo[lin][col], int bomba){
 void mostrar_campo(int lin, int col, int campo[lin][col], int jogadas [lin][col], int bomba){
     int l, c;
 
+    mudaCor(7); //define a cor padrão de saíde como cinza claro
+
+    for(c=-1; c<col; c++){
+        if(c==-1)
+            printf("#|");
+        else
+            printf("%d\t", c+1);
+    }
+
     printf("\n");
     for(l=0; l<lin; l++){
+        printf("%d|", l+1);
         for(c=0; c<col; c++){
-            if(jogadas[l][c] == 1 && campo[l][c] == bomba){
-                printf("# ");
-            }
-            else if(jogadas[l][c] == 1)
-                printf("%d ", campo[l][c]);
+            if(jogadas[l][c] == 1 && campo[l][c] != bomba){
+                mudaCor(2); //numeros em verde
+                printf("%d\t", campo[l][c]);
+                mudaCor(7);
+            }  
             else{
-                printf("? ");
+                mudaCor(6); //interrogacao em marrom
+                printf("?\t");
+                mudaCor(7);
             }
         }
         printf("\n");
     }
+
+    mudaCor(7); //define a cor padrão de saíde como cinza claro
 }
 
 //Mensagem com as regras do campo minado
@@ -152,6 +171,7 @@ void fazer_jogada(int lin, int col, int jog[lin][col], int *x, int *y){
 
 //Vendo se atingiu uma bomba, se nao, registrando a jogada 
 void analisar_jogada(int lin, int col, int cpm[lin][col], int jog[lin][col], int *x, int *y, int bomba){
+    
     if(cpm[*x][*y] == bomba){
         printf("\nVoce atingiu uma bomba, mais sorte na proxima vez!\n");
         //imprimindo o campo completo
@@ -207,4 +227,10 @@ int vitoria(int lin, int col, int cmp[lin][col], int jog[lin][col], int bomba){
         }
     
     return vit;
+}
+
+//Para mudar a cor do texto a ser impresso na tela
+void mudaCor(int cor) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, cor);
 }
