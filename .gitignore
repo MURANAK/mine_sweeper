@@ -2,4 +2,8 @@
 *.o
 *.bin
 *.d
+*.json
 Makefile
+.vscode/
+bin/
+build/
